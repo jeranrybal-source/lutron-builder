@@ -1,0 +1,10 @@
+ModuleType,LutronModelInfoID,DefaultOutputCount,Notes
+DPM Adaptive (4-output dimmer),2472,4,Universal phase-adaptive dimmer; most common dimming module on this project
+DALI Module,2606,64,Hosts up to 64 DALI ballasts on its DALI bus (each ballast is then a separate module entry)
+DALI Ballast,1856,1,A single DALI driver/ballast addressed via a parent DALI Module
+DMX Module,1230,512,512 DMX channels - one output per DMX address
+QS Shade Controller (4-shade group),229,1,QS link shade group (one logical group per controller in this project)
+QS Shade Controller (single),5044,1,Single-shade QS controller
+Wireless Repeater,2454,0,No outputs - extends radio coverage
+Processor,1886,0,Main HXP processor - already present, not a module to add
+Processor Card,1392,0,Processor support card - already present

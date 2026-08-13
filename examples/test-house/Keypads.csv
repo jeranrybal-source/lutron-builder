@@ -1,0 +1,5 @@
+Action,KeypadName,AreaName,StationName,DeviceName,KeypadModel,LinkName,AddressOnLink,ButtonCount,SerialNumber,Notes
+NEW,Hallway > By Front Door,Hallway,By Front Door,Device 1,HWIS-5BRL-F-SN,Default3890,30,,,
+NEW,Kitchen > By Door,Kitchen,By Door,Device 1,HWIS-5BRL-F-SN,Default3890,31,,,
+NEW,Living Room > By Door,Living Room,By Door,Device 1,HWIS-5BRL-F-SN,Default3890,32,,,
+NEW,Master Bedroom > By Door,Master Bedroom,By Door,Device 1,HWIS-5BRL-F-SN,Default3890,33,,,

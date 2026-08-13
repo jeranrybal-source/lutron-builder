@@ -1,0 +1,27 @@
+# Keypad ModelInfoIDs the Starter Shell can actually place, one per line.
+#
+# The shell is a binary Lutron database, so nothing on Linux -- including CI --
+# can look inside it. This manifest is how the catalogue and the shell are kept
+# honest: a model in KeypadModels_REFERENCE.csv but not in here cannot be built,
+# and a schedule that names it fails with "the shell contains no keypad of that
+# model" only once a user hits it.
+#
+# REGENERATE whenever you rebuild the shell (Windows, Designer installed):
+#   python -m hwwriter.cli --server "(localdb)\MSSQLLocalDB" inspect \
+#     --shell "shells\Starter Shell.hw"
+# and copy the ModelInfoID numbers it lists here.
+2478
+2482
+2484
+2486
+3886
+3887
+3888
+3889
+5032
+5033
+5035
+5036
+5462
+5464
+5479

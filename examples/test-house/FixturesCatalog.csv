@@ -1,0 +1,6 @@
+Action,FixtureRef,Description,LoadTypeID,LoadTypeName,FixtureWattage_W,LampQuantity,LampWattage_W,DimmingRange,LowEnd_pct,HighEnd_pct,PhaseControl,ManufacturerName,ManufacturerModel,Notes
+NEW,A,Downlight LED 8W,119,LED Reverse Phase,8,1,8,0,5,90,1,Generic,DL-8,Main ceiling downlight
+NEW,B,Downlight LED 12W,119,LED Reverse Phase,12,1,12,0,5,90,1,Generic,DL-12,Higher output downlight
+NEW,C,Pendant Halogen 60W,1,Incadescent,60,1,60,0,1,100,0,Generic,PEND-60,Mains halogen pendant
+NEW,D,Wall Light LED 5W,119,LED Reverse Phase,5,1,5,0,5,90,1,Generic,WL-5,Decorative wall light
+NEW,E,5A Socket Circuit,118,LED Non-Dim,100,1,100,0,1,100,0,Generic,5A-SKT,Switched lamp circuit

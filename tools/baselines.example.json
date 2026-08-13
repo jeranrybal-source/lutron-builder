@@ -1,0 +1,12 @@
+[
+  {
+    "label": "House A (test copy)",
+    "path": "~/Documents/Lutron Builder/House A (test copy)",
+    "expected": 85
+  },
+  {
+    "label": "House B Test",
+    "path": "~/Documents/Lutron Builder/House B Test",
+    "expected": 26
+  }
+]

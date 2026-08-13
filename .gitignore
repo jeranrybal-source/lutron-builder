@@ -1,0 +1,32 @@
+# Build artefacts -- the exe is attached to a Release, never committed (21 MB)
+out/
+dist/
+build/
+*.spec
+*.exe
+
+# Generated projects and schedules. NEVER commit a real job: a .hw carries the
+# client's whole design, and schedule CSVs carry their room names and fittings.
+out-*/
+*.hw
+!shells/Starter Shell.hw
+review.html
+EXTRACTION-REPORT.txt
+
+# Secrets. The API key belongs in the app's own config on your machine.
+.env
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Real drawing sets are somebody's house -- their locations stay local.
+tools/baselines.local.json

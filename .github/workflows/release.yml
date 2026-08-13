@@ -1,0 +1,88 @@
+name: release
+
+# Push a version tag and GitHub builds the exe on a clean Windows machine and
+# attaches it to the release:
+#
+#   git tag v1.1.0 && git push origin v1.1.0
+#
+# This replaces building by hand, which is how an ARM64 exe most people could
+# not start once got built and nearly shipped. A GitHub Windows runner is always
+# x64, so that failure cannot recur.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to build and release (e.g. v1.1.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: The tag matches the version the app displays
+        # The footer shows VERSION so a user can see what they are running --
+        # which only helps if it cannot drift from the tag being released.
+        shell: pwsh
+        # The tag reaches the script through the environment, never by string
+        # interpolation: a crafted tag would otherwise run as PowerShell on the
+        # build machine, where the release token lives.
+        env:
+          TAG_NAME: ${{ github.event.inputs.tag || github.ref_name }}
+        run: |
+          $tag = $env:TAG_NAME
+          $v = (Select-String -Path hwwriter/app.py -Pattern 'VERSION = "(.+)"').Matches[0].Groups[1].Value
+          if ($tag -ne "v$v") { throw "tag $tag but the app says v$v -- update VERSION in hwwriter/app.py" }
+          Write-Host "ok: $tag == v$v"
+
+      - name: Build the exe
+        run: powershell -ExecutionPolicy Bypass -File .\build-exe.ps1 -Python python
+
+      - name: Check it is a 64-bit Windows exe
+        # PyInstaller does not warn when it produces a binary for the wrong
+        # architecture; it just fails to start on the user's machine.
+        shell: pwsh
+        run: |
+          $exe = "dist\Lutron Builder.exe"
+          if (-not (Test-Path $exe)) { throw "no exe produced" }
+          $size = (Get-Item $exe).Length
+          if ($size -lt 10MB) { throw "exe is only $size bytes -- the bundle is incomplete" }
+          $fs = [IO.File]::OpenRead($exe); $br = New-Object IO.BinaryReader($fs)
+          $fs.Seek(0x3C, 'Begin') | Out-Null
+          $fs.Seek($br.ReadInt32() + 4, 'Begin') | Out-Null
+          $machine = $br.ReadUInt16(); $br.Close()
+          # 0x8664 = x64. 0xAA64 would be ARM64.
+          if ($machine -ne 0x8664) { throw ("wrong architecture: 0x{0:X}" -f $machine) }
+          Write-Host "ok: x64, $([math]::Round($size/1MB,1)) MB"
+
+      - name: Smoke-test that it starts and serves
+        shell: pwsh
+        run: |
+          $app = Start-Process ".\dist\Lutron Builder.exe" `
+            -ArgumentList "--no-browser","--port","8399" -PassThru -WindowStyle Hidden
+          try {
+            Start-Sleep 15
+            $s = Invoke-RestMethod http://127.0.0.1:8399/api/status -TimeoutSec 20
+            if (-not $s.app) { throw "the app answered but reported no name" }
+            Write-Host "ok: $($s.app) responded"
+          } finally { Stop-Process -Id $app.Id -Force -ErrorAction SilentlyContinue }
+
+      - name: Attach it to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          files: dist/Lutron Builder.exe
+          generate_release_notes: true
+          fail_on_unmatched_files: true

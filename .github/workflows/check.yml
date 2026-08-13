@@ -1,0 +1,79 @@
+name: check
+
+# Runs on every push and pull request. It cannot build a .hw -- that needs
+# Windows and Lutron Designer's database engine -- but it catches the breakage
+# that actually happens: a syntax error, a renamed function, a doc file the code
+# reads at runtime being moved, or the extraction brief silently regressing.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 3.10 is the floor: `ezdwg`, which reads the AutoCAD drawings, has no
+        # wheel below it. 3.12 is what the released exe is built with, so both
+        # ends of the supported range are tested.
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install pytest
+      - name: Tests
+        run: python -m pytest -q
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install ruff
+      - run: ruff check .
+
+  packaging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Files the code reads at RUNTIME are present
+        # These are read, not imported, so nothing else notices them going
+        # missing until a user hits it.
+        run: |
+          python - <<'PY'
+          import os
+          from hwwriter import ingest
+          need = ["FROM-PLANS-TO-CSV.md"] + ingest.REFERENCES
+          missing = [n for n in need if not os.path.exists(os.path.join(ingest.DOCS, n))]
+          assert not missing, f"missing runtime docs: {missing}"
+          assert os.path.exists("shells/Starter Shell.hw"), "the Starter Shell is missing"
+          print("ok:", ", ".join(need))
+          PY
+      - name: The exe bundle would include them
+        # build-exe.ps1 passes docs/ and the shell as --add-data; if that line is
+        # ever dropped the exe builds fine and then fails on a user's machine.
+        run: |
+          python - <<'PY'
+          spec = open("build-exe.ps1").read()
+          for probe in ('--add-data "docs;docs"', '--add-data "shells\\Starter Shell.hw;shells"',
+                        '--collect-all anthropic', '--collect-all ezdwg'):
+              assert probe in spec, f"build-exe.ps1 no longer bundles: {probe}"
+          # ezdwg is a compiled wheel: dropped from the install line it is not
+          # missing at build time, only on the machine that opens a drawing.
+          assert "pyinstaller ezdwg" in spec, "build-exe.ps1 no longer installs ezdwg"
+          print("ok: shell, docs, anthropic and ezdwg are bundled")
+          PY
+      - name: No client data committed
+        # A .hw is a client's entire design; schedules carry their rooms and
+        # fittings. Only the Starter Shell belongs in this repository.
+        run: |
+          bad=$(git ls-files '*.hw' | grep -v '^shells/Starter Shell.hw$' || true)
+          if [ -n "$bad" ]; then echo "project files committed:"; echo "$bad"; exit 1; fi
+          echo "ok: only the Starter Shell"

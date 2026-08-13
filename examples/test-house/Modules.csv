@@ -1,0 +1,5 @@
+Action,ModuleName,ModuleType,AreaName,LinkName,AddressOnLink,OutputCount,SerialNumber,Notes
+NEW,TH DPM 001,DPM Adaptive (4-output dimmer),Plant Room,Default3890,20,,,
+NEW,TH DPM 002,DPM Adaptive (4-output dimmer),Plant Room,Default3890,21,,,
+NEW,TH DPM 003,DPM Adaptive (4-output dimmer),Plant Room,Default3890,22,,,
+NEW,TH DPM 004,DPM Adaptive (4-output dimmer),Plant Room,Default3890,23,,,

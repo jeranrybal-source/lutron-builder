@@ -1,0 +1,14 @@
+ParameterType,Meaning,UsedInCommandTypes,ValueRange,Encoding,Notes
+1,Fade time,2 (SetLevel) / 42 (DMX) / 72 (Spectrum) / 5 (RecallScene),0-80,Lutron-internal enum,"Known: 8 = 2 seconds. 0 = use default. Other values not yet calibrated - confirm in Designer when authoring a new fade time."
+2,Delay time,2 (SetLevel) / 42 (DMX) / 72 (Spectrum) / 5 (RecallScene),0-60,Seconds,Plain integer seconds (0 = no delay)
+3,Level,2 (SetLevel) / 72 (Spectrum),0-100,Percentage,Direct percentage 0-100
+7,Scene number,5 (RecallScene),0-30,Integer,Matches tblScene.Number for the target area
+9,Raise/Lower target percentage,21 (Raise/Lower presets),0-100,Percentage,Used by master raise/lower buttons
+17,Long fade timeout (ms),Various long-press patterns,0-10000,Milliseconds,Used by long fade-to-off patterns
+20,Boolean flag,Various,1,Bit,Always 1 when present
+32,Spectrum CCT/Kelvin,72 (Spectrum),111-68377,Internal spectrum encoding,RGB/CCT colour space - decode pending
+34,DMX colour selector,42 (DMXColor),0-N,Enum,"0 = Off. Non-zero = colour preset index for that DMX zone."
+66,Spectrum Brightness,72 (Spectrum),sentinel -2147483648 = unset,Int,Spectrum lighting parameter
+68,Spectrum (variant),72 (Spectrum),fixed 109973 observed,Int,Spectrum lighting parameter
+69,Spectrum CCT (Kelvin/100),72 (Spectrum),"-2147483648 (unset) or 1-50",Int,"5 = 500K offset; values are Lutron-internal CCT codes"
+71,Spectrum Intensity,72 (Spectrum),"-2147483648 (unset) or 0-4000",Int,Spectrum lighting parameter
