@@ -841,11 +841,11 @@ def test_the_homeplay_marks_are_served_and_on_the_page():
         # repository and the public build: headings fall back to a standard
         # serif and everything else is identical. Present or absent, the route
         # must behave -- serve a real font, or refuse cleanly.
-        import os as _os
-        from hwwriter._paths import root as _root
+        brand = os.path.join(os.path.dirname(os.path.dirname(
+            os.path.abspath(__file__))), "docs", "brand")
         for name in ("times-now.woff", "saans-regular.woff2", "saans-semibold.woff2"):
             url = f"http://127.0.0.1:{port}/brand/{name}"
-            if _os.path.exists(_os.path.join(_root(), "docs", "brand", name)):
+            if os.path.exists(os.path.join(brand, name)):
                 assert urllib.request.urlopen(url).read()[:4] in (b"wOFF", b"wOF2"), name
             else:
                 try:
