@@ -1,5 +1,37 @@
 # Changelog
 
+## v1.4.0 — 2026-08-13
+
+The first public release, and the one shaped by a full day of real use.
+
+**It opens where it points.** The app told you the spreadsheet route was the
+one to use and then landed you on the AI one. It now opens on the spreadsheet.
+
+**The API key is no longer step 1.** Two of the three routes never needed it:
+a schedule spreadsheet and an AutoCAD DWG are both read on your own machine,
+free, with no AI involved. The key now lives on the PDF screen alone, and a
+first run says what the tool actually needs — Windows with Lutron Designer
+installed, Parallels on a Mac.
+
+**A European decimal is read as a decimal.** "24,5" in a wattage cell became
+245 W: commas were stripped wholesale to handle "1,200", multiplying every
+European decimal by ten with nothing on the review sheet to show for it.
+
+**A room is numbered by the designer or by Designer, never both.** Two ways a
+room could end up with two circuits numbered 1 — one where references were
+derived for only some circuits, one where a schedule numbered some rows and
+left others blank. Both now drop to Designer's own numbering for that room,
+with a warning naming it.
+
+**"Open in Lutron Designer" is honest about what it can do.** Designer
+registers no .hw association and discards a file handed to its launcher, so
+the button copies the path, brings Designer forward, and tells you to click
+Browse local and paste.
+
+**pypdf ships in the exe.** It never had, since v1.0.0 — silently breaking
+reading a plan's text layer and reading a specification PDF, while telling
+people to "pip install" on a machine with no Python.
+
 ## v1.3.2 — 2026-08-12
 
 **"Open in Lutron Designer" now actually gets you there.** Found on James's

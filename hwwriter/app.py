@@ -43,7 +43,7 @@ APP_NAME = "Lutron Builder"
 # release workflow -- so what a user sees on screen IS what they downloaded.
 # A stale instance squatting on the port once served yesterday's broken build
 # while a fresh download sat behind it, and nothing on screen said so.
-VERSION = "1.3.2"
+VERSION = "1.4.0"
 STARTER_SHELL = os.path.join(ROOT, "shells", "Starter Shell.hw")
 
 DISCLAIMER = (

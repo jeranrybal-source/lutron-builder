@@ -837,13 +837,22 @@ def test_the_homeplay_marks_are_served_and_on_the_page():
         body = urllib.request.urlopen(
             f"http://127.0.0.1:{port}/favicon.ico").read()
         assert body[1:4] == b"PNG", "the favicon route must serve the mark"
-        body = urllib.request.urlopen(
-            f"http://127.0.0.1:{port}/brand/times-now.woff").read()
-        assert body[:4] == b"wOFF", "the heading face must come back as a woff"
-        for name in ("saans-regular.woff2", "saans-semibold.woff2"):
-            body = urllib.request.urlopen(
-                f"http://127.0.0.1:{port}/brand/{name}").read()
-            assert body[:4] == b"wOF2", f"{name} must come back as a woff2"
+        # The brand typefaces are licensed, so they are absent from the public
+        # repository and the public build: headings fall back to a standard
+        # serif and everything else is identical. Present or absent, the route
+        # must behave -- serve a real font, or refuse cleanly.
+        import os as _os
+        from hwwriter._paths import root as _root
+        for name in ("times-now.woff", "saans-regular.woff2", "saans-semibold.woff2"):
+            url = f"http://127.0.0.1:{port}/brand/{name}"
+            if _os.path.exists(_os.path.join(_root(), "docs", "brand", name)):
+                assert urllib.request.urlopen(url).read()[:4] in (b"wOFF", b"wOF2"), name
+            else:
+                try:
+                    urllib.request.urlopen(url)
+                    raise AssertionError(f"{name} is not shipped but the route served something")
+                except urllib.error.HTTPError as exc:
+                    assert exc.code == 404
         try:
             urllib.request.urlopen(f"http://127.0.0.1:{port}/brand/secrets.txt")
             raise AssertionError("an unlisted name must 404")
