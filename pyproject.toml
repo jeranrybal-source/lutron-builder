@@ -1,6 +1,6 @@
 [project]
 name = "lutron-builder"
-version = "1.4.0"
+version = "1.4.1"
 description = "Turns lighting-plan PDFs into a Lutron HomeWorks project file"
 readme = "README.md"
 license = { file = "LICENSE" }

@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.1 — 2026-08-13
+
+**The type follows the brand guidelines' own typesetting page.** Times Now
+Semilight carries the title only; headings are Saans Regular a size up, and
+captions are Saans Regular uppercase. Two of those were wrong because the type
+had been built from a derived stylesheet rather than the brand document.
+Checked with the brand fonts and, as this build ships, without them.
+
 ## v1.4.0 — 2026-08-13
 
 The first public release, and the one shaped by a full day of real use.

@@ -43,7 +43,7 @@ APP_NAME = "Lutron Builder"
 # release workflow -- so what a user sees on screen IS what they downloaded.
 # A stale instance squatting on the port once served yesterday's broken build
 # while a fresh download sat behind it, and nothing on screen said so.
-VERSION = "1.4.0"
+VERSION = "1.4.1"
 STARTER_SHELL = os.path.join(ROOT, "shells", "Starter Shell.hw")
 
 DISCLAIMER = (
@@ -1269,7 +1269,7 @@ PAGE = """<!doctype html>
 *{box-sizing:border-box;margin:0}
 /* calt off per the brand CSS -- Saans ships contextual alternates the
    guidelines disable. */
-body{background:var(--bg);color:var(--ink);font:15px/1.55 'Saans',system-ui,"Segoe UI",sans-serif;
+body{background:var(--bg);color:var(--ink);font:16px/1.55 'Saans',system-ui,"Segoe UI",sans-serif;
      font-feature-settings:'calt' 0;min-height:100vh;display:flex;flex-direction:column}
 header{display:flex;align-items:baseline;gap:12px;padding:20px 28px;border-bottom:1px solid var(--line)}
 header h1{font-size:20px;font-weight:650;letter-spacing:.2px}
@@ -1294,22 +1294,27 @@ header .credit img{height:10px;object-fit:contain;vertical-align:-1px;margin-lef
    file is ever absent. */
 @font-face{font-family:'Times Now';src:url(/brand/times-now.woff) format('woff');
   font-weight:300 700;font-display:swap}
-h1,h2{font-family:'Times Now',Georgia,'Times New Roman',serif;letter-spacing:-0.02em}
-header h1{font-size:27px;font-weight:400}
-h2{font-size:23px;font-weight:400}
+/* The typesetting page of the brand guidelines, not the prototype CSS I
+   worked from before: Times Now Semilight carries the page title and H1
+   ONLY. H2 is Saans Regular, and captions are Saans REGULAR uppercase --
+   both were wrong here, which overused the display face. */
+h1{font-family:'Times Now',Georgia,'Times New Roman',serif;letter-spacing:-0.02em}
+header h1{font-size:28px;font-weight:300}
+h2{font-family:'Saans',system-ui,sans-serif;font-size:22px;font-weight:400;
+   letter-spacing:-0.01em}
 main{flex:1;display:grid;grid-template-columns:210px 1fr;gap:0;max-width:1200px;width:100%;margin:0 auto}
 nav{border-right:1px solid var(--line);padding:26px 0}
 /* The four stages in caps -- the caption idiom from the brand guidelines:
    Saans semibold, small, tracked wide. */
 nav .step{padding:11px 22px;color:var(--muted);cursor:default;border-left:3px solid transparent;
-  font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+  font-size:12px;font-weight:400;letter-spacing:.14em;text-transform:uppercase}
 nav .step.go{cursor:pointer}
 nav .step.go:hover{color:var(--ink)}
 nav .step.on{color:var(--ink);border-left-color:var(--accent);font-weight:600}
 nav .step.done{color:var(--ink)}
 nav .step.done::after{content:" \\2713";color:var(--good)}
 section{padding:30px 34px;max-width:760px}
-h2{font-size:17px;font-weight:650;margin-bottom:6px}
+h2{margin-bottom:8px}   /* size and face are set above, from the guidelines */
 p.lead{color:var(--muted);margin-bottom:18px;max-width:58ch}
 label{display:block;font-size:13px;font-weight:600;margin:14px 0 4px}
 input[type=text],input[type=password],textarea{width:100%;padding:9px 11px;border:1px solid var(--line);
@@ -1339,7 +1344,7 @@ iframe{width:100%;height:520px;border:1px solid var(--line);border-radius:8px;ba
    crammed beside it (James, 08-12 -- "just looks bad... give it some space
    to breathe"). Olive for the good news, the warning colour for the
    experimental routes. */
-.eyebrow{font:600 12px 'Saans',system-ui,sans-serif;letter-spacing:.18em;
+.eyebrow{font:400 12px 'Saans',system-ui,sans-serif;letter-spacing:.18em;
   text-transform:uppercase;color:var(--accent);margin:26px 0 10px}
 .eyebrow.trial{color:var(--bad)}
 /* Step 1 read as a toll gate: most people use the spreadsheet route and
