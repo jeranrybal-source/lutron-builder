@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.5.0 — 2026-08-13
+
+**The app wears the homeplay.tv design.** Taken from the site's own code, not
+from memory of it: the warm paper, the ink-dark footer with the white star,
+the wordmark centred at the site's exact size, regular-weight pill buttons,
+ink captions over hairlines. The review sheet gets the same dress, with Times
+Now carrying its title and tile figures — and both still hold on the fallback
+fonts this build ships with.
+
+**It says when a newer version exists.** One anonymous question to GitHub at
+launch, a link in the footer if there is one, and silence on any failure —
+offline looks exactly like up to date. The first-run screen declares it.
+
+**Saved projects are pill chips on every route.** They were a wall of links
+beside the Read button, and the only way to reopen a project was hidden on
+the PDF tab.
+
+**Scenes are called what they are: area scenes.** Each belongs to a room and
+sets that room's circuits; a keypad button recalls the room's scene. A
+project read from a spreadsheet now says why its scene list starts empty —
+and that scenes added there are written into the built file.
+
+**A step ticks when you have finished it, not when a file exists.** Reopening
+a project no longer shows Check already ticked while you stand on Plans.
+
+**The Build screen speaks plainly off Windows.** The file has to be built on
+a Windows machine with Lutron Designer installed — and a file built anywhere
+else cannot be opened by Designer, which is the sentence that saves someone
+carrying one over.
+
 ## v1.4.1 — 2026-08-13
 
 **The type follows the brand guidelines' own typesetting page.** Times Now

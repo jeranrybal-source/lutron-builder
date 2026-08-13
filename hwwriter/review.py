@@ -674,37 +674,55 @@ _PAGE = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{project} — lighting schedule review</title>
 <style>
-  :root {{ color-scheme: light dark; --fg:#1a1a18; --bg:#fbfbf9; --mut:#6b6b63;
-           --line:#e2e2dc; --accent:#707052; --bad:#a2432f; }}
+  /* The homeplay.tv design tokens, same as the app shell: warm paper, ink,
+     the olive-grey accent, Times Now for display. The fonts are served by
+     the app at /brand/ when the sheet is viewed there; opened offline (it
+     gets emailed) they fall back to Georgia / the system face, and the
+     layout is designed to hold on the fallbacks. */
+  :root {{ color-scheme: light dark;
+    --fg:#111111; --bg:#f6ebe4; --panel:#fdf9f4; --mut:#6f6a5c;
+    --line:#dcd2c6; --accent:#8d897c; --deep:#707052; --bad:#8c3a2e; }}
   @media (prefers-color-scheme: dark) {{
-    :root {{ --fg:#e8e8e2; --bg:#16161a; --mut:#9a9a92; --line:#2e2e34;
-             --accent:#b8b88a; --bad:#e0846c; }}
+    :root {{ --fg:#f2efe8; --bg:#111111; --panel:#1d1c19; --mut:#9c978a;
+             --line:#2f2d29; --accent:#8d897c; --deep:#a5a184; --bad:#e0846c; }}
   }}
+  @font-face {{ font-family:'Times Now'; src:url(/brand/times-now.woff) format('woff');
+    font-weight:300 700; font-display:swap; }}
+  @font-face {{ font-family:'Saans'; src:url(/brand/saans-regular.woff2) format('woff2');
+    font-weight:400; font-display:swap; }}
+  @font-face {{ font-family:'Saans'; src:url(/brand/saans-semibold.woff2) format('woff2');
+    font-weight:600; font-display:swap; }}
   * {{ box-sizing:border-box; }}
-  body {{ margin:0; padding:2rem 1.25rem 5rem; background:var(--bg); color:var(--fg);
-         font:15px/1.55 ui-sans-serif,-apple-system,"Segoe UI",system-ui,sans-serif; }}
+  body {{ margin:0; padding:2.25rem 1.5rem 5rem; background:var(--bg); color:var(--fg);
+         font:15px/1.55 'Saans',system-ui,-apple-system,"Segoe UI",sans-serif;
+         font-feature-settings:'calt' 0; }}
   main {{ max-width:70rem; margin:0 auto; }}
-  h1 {{ font-size:1.6rem; margin:0 0 .25rem; letter-spacing:-.01em; }}
-  .lede {{ color:var(--mut); margin:0 0 2rem; }}
-  h2 {{ font-size:1.15rem; margin:2.75rem 0 .75rem; padding-bottom:.4rem;
-        border-bottom:2px solid var(--accent); }}
-  h3 {{ font-size:1rem; margin:1.75rem 0 .5rem; }}
-  h4 {{ font-size:.9rem; margin:1.25rem 0 .4rem; color:var(--mut);
-        text-transform:uppercase; letter-spacing:.06em; }}
+  h1 {{ font-family:'Times Now',Georgia,'Times New Roman',serif; font-weight:300;
+        font-size:2.1rem; margin:0 0 .3rem; letter-spacing:-.02em; }}
+  .lede {{ color:var(--mut); margin:0 0 2.25rem; max-width:62ch; }}
+  /* Section headings are the site's caption idiom: tracked caps over a
+     hairline, with the content carrying the size. */
+  h2 {{ font-size:.8rem; font-weight:400; margin:3rem 0 .9rem; padding-bottom:.5rem;
+        border-bottom:1px solid var(--line); text-transform:uppercase;
+        letter-spacing:.12em; }}
+  h3 {{ font-size:1rem; margin:1.75rem 0 .5rem; font-weight:600; }}
+  h4 {{ font-size:.78rem; margin:1.4rem 0 .4rem; color:var(--mut); font-weight:400;
+        text-transform:uppercase; letter-spacing:.1em; }}
   .sub {{ font-weight:400; color:var(--mut); font-size:.85rem; }}
   table {{ width:100%; border-collapse:collapse; margin:.35rem 0 1rem; font-size:.88rem; }}
-  th,td {{ text-align:left; padding:.4rem .6rem; border-bottom:1px solid var(--line);
+  th,td {{ text-align:left; padding:.45rem .6rem; border-bottom:1px solid var(--line);
            vertical-align:top; }}
-  th {{ font-weight:600; font-size:.75rem; text-transform:uppercase;
-        letter-spacing:.05em; color:var(--mut); }}
-  tbody tr:hover {{ background:color-mix(in srgb, var(--accent) 7%, transparent); }}
+  th {{ font-weight:400; font-size:.72rem; text-transform:uppercase;
+        letter-spacing:.1em; color:var(--mut); }}
+  tbody tr:hover {{ background:color-mix(in srgb, var(--accent) 10%, transparent); }}
   .scroll {{ overflow-x:auto; }}
   .tiles {{ display:flex; flex-wrap:wrap; gap:.75rem; margin:0 0 1rem; }}
-  .tile {{ flex:1 1 8rem; padding:.85rem 1rem; border:1px solid var(--line);
-           border-radius:.5rem; background:color-mix(in srgb,var(--fg) 3%,transparent); }}
-  .tile .n {{ font-size:1.5rem; font-weight:600; letter-spacing:-.02em; }}
-  .tile .l {{ font-size:.75rem; color:var(--mut); text-transform:uppercase;
-              letter-spacing:.05em; }}
+  .tile {{ flex:1 1 8rem; padding:.9rem 1.1rem; border:1px solid var(--line);
+           border-radius:.5rem; background:var(--panel); }}
+  .tile .n {{ font-family:'Times Now',Georgia,serif; font-weight:300; font-size:1.9rem;
+              letter-spacing:-.02em; }}
+  .tile .l {{ font-size:.72rem; color:var(--mut); text-transform:uppercase;
+              letter-spacing:.1em; }}
   .flags {{ margin:.5rem 0; padding-left:1.2rem; }}
   .flags li {{ margin:.25rem 0; }}
   .bad {{ color:var(--bad); font-weight:600; }}
@@ -715,11 +733,14 @@ _PAGE = """<!doctype html>
                    background:color-mix(in srgb,var(--bad) 7%,transparent); }}
   .rownote {{ color:var(--mut); font-size:.85rem; }}
   .assumed {{ color:var(--bad); font-size:.72rem; text-transform:uppercase;
-              letter-spacing:.05em; font-weight:600; margin-left:.3rem; }}
+              letter-spacing:.08em; font-weight:600; margin-left:.3rem; }}
   p.note {{ color:var(--mut); font-size:.85rem; margin:.2rem 0 .4rem; }}
   .empty {{ color:var(--mut); font-style:italic; margin:.35rem 0 1rem; }}
   table.scenes {{ font-variant-numeric:tabular-nums; }}
-  @media print {{ body {{ padding:0; }} h2 {{ break-after:avoid; }} table {{ break-inside:auto; }} }}
+  a {{ color:var(--deep); }}
+  ::selection {{ background:#858567; color:#fff; }}
+  @media print {{ body {{ padding:0; background:#fff; }} h2 {{ break-after:avoid; }}
+                  table {{ break-inside:auto; }} }}
 </style></head>
 <body><main>
 <h1>{project}</h1>

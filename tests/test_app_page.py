@@ -998,3 +998,25 @@ def test_the_packaged_designer_alias_is_found_and_channels_are_skipped(tmp_path,
     monkeypatch.setattr(app_mod, "save_config", lambda cfg: None)
     exe = app_mod.find_designer_exe()
     assert exe and os.path.basename(exe) == "Lutron Designer.exe", exe
+
+
+def test_the_update_notice_asks_github_once_and_fails_silently():
+    """One anonymous question to GitHub at launch -- a copy handed out from a
+    download page has no other way to learn it is stale (James, 08-13). The
+    first run declares the departure, because the app promises elsewhere that
+    nothing leaves the machine; and a network failure must look exactly like
+    up to date, because this tool gets used on site with no network at all."""
+    script = _script()
+    assert "function checkUpdate" in script
+    # It runs at boot, after the state it compares against has loaded.
+    assert "checkUpdate()" in script.split("await refresh(false);", 1)[1]
+    body = script.split("function checkUpdate", 1)[1]
+    assert "api.github.com/repos/homeplayltd/lutron-builder/releases/latest" in body
+    assert "catch" in body.split("(async()=>{")[0], "a failed check must be silent"
+    # The release name arrives from the network; unescaped, GitHub could write
+    # markup into the page.
+    assert "escHTML(latest)" in body
+    # Versions compare number by number -- string order calls 1.10 old.
+    assert "parseInt" in body
+    # The first-run screen says the app does this.
+    assert "asks GitHub one anonymous question" in script

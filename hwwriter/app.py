@@ -43,7 +43,7 @@ APP_NAME = "Lutron Builder"
 # release workflow -- so what a user sees on screen IS what they downloaded.
 # A stale instance squatting on the port once served yesterday's broken build
 # while a fresh download sat behind it, and nothing on screen said so.
-VERSION = "1.4.1"
+VERSION = "1.5.0"
 STARTER_SHELL = os.path.join(ROOT, "shells", "Starter Shell.hw")
 
 DISCLAIMER = (
@@ -1250,18 +1250,22 @@ PAGE = """<!doctype html>
 <title>Lutron Builder</title>
 <link rel="icon" type="image/png" href="/brand/favicon.png">
 <style>
-/* Brand tokens, from the design contract (colors_and_type.css): paper, mist,
-   ink and the olive accent. Times Now for display, Saans for everything else. */
+/* Design tokens, lifted from the homeplay.tv site's own code (globals.css,
+   button.tsx, Footer.tsx) rather than approximated from screenshots: the warm
+   paper #f6ebe4, ink #111, the button olive-grey hsl(46,7%,52%), the deeper
+   brand olive for text accents, and the site's olive text selection. Times
+   Now for display, Saans for everything else. */
 :root{
-  --bg:#faf9f7; --panel:#ffffff; --ink:#111111; --muted:#6d7060;
-  --accent:#707052; --accent-ink:#ffffff; --line:#e7e4dd;
+  --bg:#f6ebe4; --panel:#fdf9f4; --ink:#111111; --muted:#6f6a5c;
+  --accent:#8d897c; --accent-deep:#707052; --accent-ink:#ffffff; --line:#dcd2c6;
   --good:#3e6b3e; --bad:#8c3a2e; --mono:ui-monospace,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root{
-  --bg:#1c1d18; --panel:#25261f; --ink:#e8e7dd; --muted:#9b9e8c;
-  --accent:#9a9a74; --accent-ink:#1c1d18; --line:#3a3b30;
+  --bg:#111111; --panel:#1d1c19; --ink:#f2efe8; --muted:#9c978a;
+  --accent:#8d897c; --accent-deep:#a5a184; --accent-ink:#ffffff; --line:#2f2d29;
   --good:#8fbf8f; --bad:#e0836f;
 }}
+::selection{background:#858567;color:#fff}
 @font-face{font-family:'Saans';src:url(/brand/saans-regular.woff2) format('woff2');
   font-weight:400;font-display:swap}
 @font-face{font-family:'Saans';src:url(/brand/saans-semibold.woff2) format('woff2');
@@ -1271,23 +1275,31 @@ PAGE = """<!doctype html>
    guidelines disable. */
 body{background:var(--bg);color:var(--ink);font:16px/1.55 'Saans',system-ui,"Segoe UI",sans-serif;
      font-feature-settings:'calt' 0;min-height:100vh;display:flex;flex-direction:column}
-header{display:flex;align-items:baseline;gap:12px;padding:20px 28px;border-bottom:1px solid var(--line)}
-header h1{font-size:20px;font-weight:650;letter-spacing:.2px}
-header .credit{color:var(--muted);font-size:12.5px}
+/* The site's own header anatomy (Header.tsx): product on the left, the
+   HOMEPLAY wordmark CENTRED at the site's exact size (112x15), the control on
+   the right, 20px of vertical padding. The old header shrank the wordmark to
+   a 10px-tall aside next to "by" -- James, 08-13: it read as too small. */
+header{position:relative;display:flex;align-items:center;gap:14px;padding:20px 32px;border-bottom:1px solid var(--line)}
+header .credit{position:absolute;left:50%;transform:translateX(-50%);line-height:0}
+header .credit img{height:15px;width:auto;object-fit:contain}
+@media (max-width:760px){header .credit{display:none}}
 /* The Homeplay marks, black on the light theme and white on the dark one --
-   two <img>s and a display swap, because a PNG cannot recolour itself. The
-   star sits bottom-left (James, 08-12: top-left read as clutter and detracted
-   from the wordmark); the wordmark stays in the header. */
-footer img.mark{width:60px;height:60px;object-fit:contain;flex:none}
-/* The same visual gap either side of "by": the header flex gap is 12px, so
-   the wordmark sits 11px off the word (James, 08-12 -- the single text space
-   made "by HOMEPLAY" read as one word against the wide gap before it). */
-header .credit img{height:10px;object-fit:contain;vertical-align:-1px;margin-left:11px}
+   two <img>s and a display swap, because a PNG cannot recolour itself. */
+footer img.mark{width:76px;height:76px;object-fit:contain;flex:none}
 .dark-mark{display:none}
 @media (prefers-color-scheme: dark){
   .light-mark{display:none}
   .dark-mark{display:inline-block}
 }
+/* The footer is the site's: always ink-dark with white marks (Footer.tsx is
+   bg-[#111111] in both themes), so the swap above is pinned here. */
+footer{background:#111111;color:rgba(255,255,255,.75);border-top:1px solid rgba(255,255,255,.1);
+  margin-top:56px;display:flex;align-items:center;gap:22px;padding:28px 32px;font-size:12px}
+footer .light-mark{display:none}
+footer .dark-mark{display:inline-block}
+footer .fnote{max-width:64ch;line-height:1.6}
+footer .fver{margin-left:auto;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.5)}
 /* Times Now for the key headings -- the brand display face, served with the
    marks. Single semi-light weight, so headings drop the synthetic bold and
    take a size step up instead. Falls back to an ordinary serif if the font
@@ -1299,7 +1311,7 @@ header .credit img{height:10px;object-fit:contain;vertical-align:-1px;margin-lef
    ONLY. H2 is Saans Regular, and captions are Saans REGULAR uppercase --
    both were wrong here, which overused the display face. */
 h1{font-family:'Times Now',Georgia,'Times New Roman',serif;letter-spacing:-0.02em}
-header h1{font-size:28px;font-weight:300}
+header h1{font-size:26px;font-weight:300;letter-spacing:-0.02em}
 h2{font-family:'Saans',system-ui,sans-serif;font-size:22px;font-weight:400;
    letter-spacing:-0.01em}
 main{flex:1;display:grid;grid-template-columns:210px 1fr;gap:0;max-width:1200px;width:100%;margin:0 auto}
@@ -1307,45 +1319,76 @@ nav{border-right:1px solid var(--line);padding:26px 0}
 /* The four stages in caps -- the caption idiom from the brand guidelines:
    Saans semibold, small, tracked wide. */
 nav .step{padding:11px 22px;color:var(--muted);cursor:default;border-left:3px solid transparent;
-  font-size:12px;font-weight:400;letter-spacing:.14em;text-transform:uppercase}
+  font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase}
 nav .step.go{cursor:pointer}
 nav .step.go:hover{color:var(--ink)}
 nav .step.on{color:var(--ink);border-left-color:var(--accent);font-weight:600}
 nav .step.done{color:var(--ink)}
 nav .step.done::after{content:" \\2713";color:var(--good)}
-section{padding:30px 34px;max-width:760px}
-h2{margin-bottom:8px}   /* size and face are set above, from the guidelines */
-p.lead{color:var(--muted);margin-bottom:18px;max-width:58ch}
-label{display:block;font-size:13px;font-weight:600;margin:14px 0 4px}
+section{padding:36px 44px 56px;max-width:780px}
+h2{margin-bottom:10px}   /* size and face are set above, from the guidelines */
+p.lead{color:var(--muted);margin-bottom:24px;max-width:58ch}
+label{display:block;font-size:13px;font-weight:600;margin:20px 0 6px}
+/* Fields sit on the panel colour, not the page colour -- on paper they were
+   outlines only, and the form read as text floating in space. */
 input[type=text],input[type=password],textarea{width:100%;padding:9px 11px;border:1px solid var(--line);
-  border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+  border-radius:6px;background:var(--panel);color:var(--ink);font:inherit}
+select{background:var(--panel)}
 textarea{min-height:74px;resize:vertical}
+/* The site's button (button.tsx): a full pill, regular weight -- not bold --
+   in the warm olive-grey, dimming slightly on hover. The ghost is the site's
+   outline variant: hairline border, ink text. */
 button{appearance:none;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);
-  padding:9px 18px;border-radius:6px;font:600 14px 'Saans',system-ui,"Segoe UI",sans-serif;cursor:pointer;margin-top:16px}
-button.ghost{background:transparent;color:var(--accent)}
+  padding:10px 22px;border-radius:999px;font:400 15px 'Saans',system-ui,"Segoe UI",sans-serif;cursor:pointer;margin-top:16px}
+button:hover{opacity:.9}
+button.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+button.ghost:hover{opacity:1;border-color:var(--ink)}
 button:disabled{opacity:.45;cursor:default}
-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .log{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;
   font:12.5px/1.6 var(--mono);white-space:pre-wrap;max-height:320px;overflow:auto;margin-top:16px}
 .err{color:var(--bad);font-weight:600}
 .note{font-size:12.5px;color:var(--muted);margin-top:8px;max-width:58ch}
-.filebox{border:1.5px dashed var(--line);border-radius:8px;padding:22px;text-align:center;
+/* One card, used for every callout box the page draws -- the six ad-hoc
+   inline-styled boxes drifted apart in padding, radius and margin. */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+  padding:18px 20px;margin-top:16px}
+.card.accent{border-color:var(--accent)}
+.card.warn{border-color:var(--bad)}
+/* Disclosures all dress the same, for the same reason as the cards. */
+details{border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin-top:12px}
+summary{cursor:pointer;font-size:13px;font-weight:600}
+.filebox{border:1.5px dashed var(--line);border-radius:8px;padding:26px;text-align:center;
   color:var(--muted);margin-top:14px;cursor:pointer}
 .filebox.has{border-color:var(--accent);color:var(--ink);text-align:left;padding:12px 14px}
 .frow{display:flex;justify-content:space-between;align-items:center;gap:14px;
-  padding:5px 0;cursor:default;font-size:13.5px}
+  padding:6px 0;cursor:default;font-size:13.5px}
 .frow+.frow{border-top:1px solid var(--line)}
-iframe{width:100%;height:520px;border:1px solid var(--line);border-radius:8px;background:#fff;margin-top:14px}
+iframe{width:100%;height:520px;border:1px solid var(--line);border-radius:8px;background:#fff;margin-top:16px}
+/* Hairline separators, the brand's own table idiom. */
+#stbl th,#ftbl th{padding:6px 10px 6px 0;font-weight:600}
+#stbl td,#ftbl td{padding:7px 10px 7px 0;border-top:1px solid var(--line)}
+#stbl td button,#ftbl td button{margin-top:0}
 .pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;
   background:var(--panel);border:1px solid var(--line);color:var(--muted)}
 .pill.busy{color:var(--accent)}
+/* Saved projects as quiet outlined pills -- the 08-13 list was a wall of
+   underlined links crammed beside the main button, and on a machine with
+   twenty projects it drowned the button it sat next to. */
+.chips{max-width:64ch}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:4px 13px;
+  margin:0 6px 8px 0;font-size:12.5px;color:var(--ink);text-decoration:none;background:var(--panel)}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
 /* The brand eyebrow: a tracked-caps line ABOVE the heading, not a pill
    crammed beside it (James, 08-12 -- "just looks bad... give it some space
-   to breathe"). Olive for the good news, the warning colour for the
-   experimental routes. */
-.eyebrow{font:400 12px 'Saans',system-ui,sans-serif;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--accent);margin:26px 0 10px}
+   to breathe"). Restyled to the site's SectionHeader: ink caption, tracked
+   wide, with the hairline UNDER the caption row and the content following.
+   The warning colour stays for the experimental routes. */
+.eyebrow{font:400 12px 'Saans',system-ui,sans-serif;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink);margin:32px 0 14px;
+  border-bottom:1px solid var(--line);padding-bottom:8px}
+.eyebrow:first-child{margin-top:0}
 .eyebrow.trial{color:var(--bad)}
 /* Step 1 read as a toll gate: most people use the spreadsheet route and
    never need a key at all (James, 08-13). Say so where they see it first. */
@@ -1358,11 +1401,11 @@ nav .step .opt{display:block;font-size:9.5px;letter-spacing:.1em;opacity:.75;
   animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
 @media (prefers-reduced-motion: reduce){.dot{animation:none}}
-a{color:var(--accent)}
+a{color:var(--accent-deep)}
 </style></head><body>
 <header>
 <h1>Lutron Builder</h1>
-<span class="credit">by <img class="light-mark" src="/brand/wordmark-black.png" alt="Homeplay"><img class="dark-mark" src="/brand/wordmark-white.png" alt="Homeplay"></span>
+<span class="credit"><img class="light-mark" src="/brand/wordmark-black.png" alt="Homeplay"><img class="dark-mark" src="/brand/wordmark-white.png" alt="Homeplay"></span>
 <span id="pill" class="pill" style="margin-left:auto">idle</span></header>
 <main>
 <nav>
@@ -1372,11 +1415,11 @@ a{color:var(--accent)}
 </nav>
 <section id="content"></section>
 </main>
-<footer style="padding:10px 28px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;display:flex;align-items:center;gap:12px">
+<footer>
 <img class="mark light-mark" src="/brand/logomark-black.png" alt="Homeplay">
 <img class="mark dark-mark" src="/brand/logomark-white.png" alt="Homeplay">
-<span>Provided free of charge, as is &mdash; check everything against the drawings; all output and its use are your responsibility.</span>
-<span style="margin-left:auto">__APP_VERSION__</span>
+<span class="fnote">Provided free of charge, as is &mdash; check everything against the drawings; all output and its use are your responsibility.</span>
+<span class="fver">Homeplay &middot; __APP_VERSION__<span id="upd"></span></span>
 </footer>
 <script>
 let S=null, view=null, files=[], famChosen='';
@@ -1441,7 +1484,14 @@ document.addEventListener('click',function(e){
 });
 function setNav(cur){
   panel=cur;
-  const done={plans:S.report_ready, check:S.review_ready, build:!!S.hw_path};
+  // A tick means the user has FINISHED a step, not that its file exists.
+  // Check used to tick whenever a review sheet existed, so reopening a project
+  // showed Check as done while the user stood on Plans, before they had looked
+  // at anything (James, 08-13). Checking is finished when the user has moved
+  // past it: they are on Build, or a file has actually been built.
+  const done={plans:S.report_ready,
+              check:!!S.hw_path||cur==='build',
+              build:!!S.hw_path};
   document.querySelectorAll('.step').forEach(el=>{
     el.classList.toggle('on', el.dataset.s===cur);
     el.classList.toggle('done', !!done[el.dataset.s] && el.dataset.s!==cur);
@@ -1499,7 +1549,7 @@ function logBlock(){
 function keyBlock(){
   if(S.key_set)return `<p class="note">Using the API key saved on this computer.
     <a href="#" onclick="return vSettings()">Replace it</a></p>`;
-  return `<div style="border:1px solid var(--accent);border-radius:8px;padding:16px 18px;margin-top:18px;max-width:60ch">
+  return `<div class="card accent" style="max-width:60ch">
     <div class="eyebrow" style="margin-top:0">Needed for this route only</div>
     <b style="color:var(--ink)">An Anthropic API key</b>
     <p class="note" style="margin-top:6px">Reading a picture is the one job only AI can do, so this
@@ -1531,7 +1581,7 @@ function vSettings(){
 function vFirstRun(){
   h(`<div class="eyebrow">Before you start</div>
   <h2>What this needs</h2>
-  <div style="border:1px solid var(--accent);border-radius:8px;padding:16px 18px;max-width:62ch">
+  <div class="card accent" style="max-width:62ch">
   <p><b style="color:var(--ink)">Windows, and Lutron Designer installed on the same machine.</b>
   Writing the .hw file uses the database engine that Designer installs, so the last step only
   works where Designer lives. On a Mac that means Windows in Parallels (or similar) with
@@ -1539,7 +1589,10 @@ function vFirstRun(){
   <p class="note">Everything before that &mdash; reading a schedule, checking the review sheet,
   correcting it &mdash; runs anywhere.</p>
   </div>
-  <div style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-top:14px;font-size:12.5px;color:var(--muted);max-width:62ch"><b style="color:var(--ink)">Please read:</b> ${S.disclaimer}</div>
+  <div class="card" style="font-size:12.5px;color:var(--muted);max-width:62ch"><b style="color:var(--ink)">Please read:</b> ${S.disclaimer}</div>
+  <p class="note">At launch the app asks GitHub one anonymous question &mdash; is there a newer
+  version? &mdash; and puts a link in the footer if there is. Nothing else leaves this machine
+  unless you choose to send it.</p>
   <button onclick="acceptFirstRun()">I understand &mdash; continue</button>`);
 }
 async function acceptFirstRun(){await api('/api/accept',{});await refresh(false);vStep2()}
@@ -1569,7 +1622,7 @@ function vPlans(){
   // Why there is nothing to choose. Collapsed by default -- the answer to
   // "which model?" is short, and the evidence is there for anyone who asks.
   const modelNote =
-    '<details style="margin-top:8px"><summary style="cursor:pointer;font-size:12.5px;color:var(--muted)">Why only this model?</summary>'
+    '<details><summary>Why only this model?</summary>'
     + '<div class="note" style="margin-top:8px;max-width:62ch">'
     + (S.model_note||'').split('\\n\\n').map(p=>'<p style="margin-bottom:7px">'+escHTML(p)+'</p>').join('')
     + '</div></details>';
@@ -1617,7 +1670,7 @@ function vPlans(){
   <label for="nt">Notes for the AI <span style="color:var(--muted);font-weight:400">(optional &mdash; anything the drawings don't say)</span></label>
   <textarea id="nt" placeholder="e.g. all downlights are mains-dimmed LED; ignore the garage" oninput="projNotes=this.value">${escAttr(projNotes)}</textarea>
   <label for="kpf">Keypad family <span style="color:var(--muted);font-weight:400">(the default &mdash; drawings rarely say)</span></label>
-  <select id="kpf" onchange="famChosen=this.value;vPlans()" style="width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit">
+  <select id="kpf" onchange="famChosen=this.value;vPlans()" style="width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:inherit">
     <option value="" ${famChosen===''?'selected':''}>Choose a family&hellip;</option>
     ${S.keypad_families.map(f=>`<option value="${f}" ${f===famChosen?'selected':''}>${f}</option>`).join('')}
     <option value="__ai__" ${famChosen==='__ai__'?'selected':''}>Let the AI choose one (it will say which)</option>
@@ -1634,8 +1687,8 @@ function vPlans(){
   <p style="margin-top:2px">${escHTML(theModel.label||'')}${estLine}</p>
   ${modelNote}
   ${estNote}
-  <details style="margin-top:16px;border:1px solid var(--line);border-radius:8px;padding:10px 14px">
-    <summary style="cursor:pointer;font-size:13px;font-weight:600">What makes a good read &mdash; send these if you have them</summary>
+  <details style="margin-top:20px">
+    <summary>What makes a good read &mdash; send these if you have them</summary>
     <div class="note" style="margin-top:10px;max-width:62ch">
       <p>The read is only as good as the set it is given, and the difference is
       not small. Measured on one real job: the same plans read <b style="color:var(--ink)">194
@@ -1666,8 +1719,8 @@ function vPlans(){
       floors separately loses the earlier ones.</p>
     </div>
   </details>
-  <details style="margin-top:10px;border:1px solid var(--line);border-radius:8px;padding:10px 14px">
-    <summary style="cursor:pointer;font-size:13px;font-weight:600">What will this read cost, and why?</summary>
+  <details>
+    <summary>What will this read cost, and why?</summary>
     <div class="note" style="margin-top:10px;max-width:62ch">
       <p>Everything is billed to your own Anthropic account. A typical house is a
       <b style="color:var(--ink)">few pounds</b> on the recommended model; turning
@@ -1701,9 +1754,17 @@ function vPlans(){
   ${keyBlock()}
   <div class="row">
     <button onclick="extract()" ${busy||!S.key_set?'disabled':''}>${busy?'Reading\\u2026':'Read the plans'}</button>
-    ${S.projects.length?'<span class="note">or reopen: '+S.projects.map(p=>`<a href="#" data-project="${escAttr(p)}">${escHTML(p)}</a>`).join(' \\u00b7 ')+'</span>':''}
   </div>
-  ${logBlock()}`);
+  ${reopenBlock()}${logBlock()}`);
+}
+// The saved projects, as their own labelled section on every way in -- not a
+// wall of links beside the Read button (James, 08-13), and not only on the
+// PDF route, because these links are the ONLY way to reopen a project and a
+// spreadsheet user never visits the PDF tab.
+function reopenBlock(){
+  if(!S||!S.projects||!S.projects.length)return '';
+  const chips=S.projects.map(p=>`<a class="chip" href="#" data-project="${escAttr(p)}">${escHTML(p)}</a>`).join('');
+  return '<div class="eyebrow">Or reopen a project</div><div class="chips">'+chips+'</div>';
 }
 // Every chosen file is kept, whatever its size. The ~30 MB page limit is
 // enforced at Read time instead (see extract), because a document ticked
@@ -1743,12 +1804,12 @@ function vDwg(){
   <div class="filebox" onclick="document.getElementById('df').click()">Click to choose a .dwg file</div>
   <input id="df" type="file" accept=".dwg" style="display:none" onchange="pickSheet(this)">
   <p class="note">Read on this computer; nothing is uploaded and nothing is charged. You are shown
-  every row and every column before anything is written.</p>`+logBlock());
+  every row and every column before anything is written.</p>`+reopenBlock()+logBlock());
 }
 function setSource(s){source=s;pinned=true;vStep2()}
 function sourceTabs(){
   const on='background:var(--accent);color:var(--accent-ink);border-color:var(--accent)';
-  const off='background:transparent;color:var(--muted)';
+  const off='background:transparent;color:var(--ink);border-color:var(--line)';
   // Built with template literals at the top level, never nested inside the
   // big one below -- a nested literal defeats the page test that catches
   // unterminated strings, and that test is all that stands between a stray
@@ -1756,10 +1817,10 @@ function sourceTabs(){
   // Ordered best first, deliberately. The three ways in are not equals and
   // the difference between them is the difference between a schedule you can
   // build and one you have to check line by line.
-  return `<div class="row" style="gap:0;margin:0 0 8px">
-    <button style="margin:0;border-radius:6px 0 0 6px;${source==='sheet'?on:off}" onclick="setSource('sheet')">1. A schedule spreadsheet</button>
-    <button style="margin:0;border-radius:0;border-left:none;${source==='dwg'?on:off}" onclick="setSource('dwg')">2. AutoCAD DWG</button>
-    <button style="margin:0;border-radius:0 6px 6px 0;border-left:none;${source==='plans'?on:off}" onclick="setSource('plans')">3. PDF Plans</button>
+  return `<div class="row" style="gap:8px;margin:0 0 10px">
+    <button style="margin:0;${source==='sheet'?on:off}" onclick="setSource('sheet')">1. A schedule spreadsheet</button>
+    <button style="margin:0;${source==='dwg'?on:off}" onclick="setSource('dwg')">2. AutoCAD DWG</button>
+    <button style="margin:0;${source==='plans'?on:off}" onclick="setSource('plans')">3. PDF Plans</button>
   </div>
   <p class="note" style="margin:0 0 18px"><b style="color:var(--ink)">The better the input, the better
   the output</b> &mdash; and the gap between these three is large. A spreadsheet is the designer's own
@@ -1850,7 +1911,7 @@ function vSheet(){
     <p class="note"><b style="color:var(--ink)">Haven't got a schedule?</b> Send whoever is doing
     the lighting this sheet and ask them to fill it in. It has the right columns already on it,
     so it comes back in a form this reads perfectly.
-    <a href="/template.xlsx" style="color:var(--accent-ink);background:var(--accent);padding:5px 11px;border-radius:6px;text-decoration:none;font-weight:600;display:inline-block;margin-top:7px">Download the blank template</a></p>
+    <a href="/template.xlsx" style="color:var(--accent-ink);background:var(--accent);padding:6px 14px;border-radius:999px;text-decoration:none;font-weight:600;display:inline-block;margin-top:8px">Download the blank template</a></p>
     <div class="filebox" onclick="document.getElementById('sf').click()">Click to choose a .csv or .xlsx file</div>
     <input id="sf" type="file" accept=".csv,.tsv,.xlsx,.xlsm" style="display:none" onchange="pickSheet(this)">
     <p class="note">The file is read on this computer. Nothing is uploaded, nothing is charged, and
@@ -1859,7 +1920,7 @@ function vSheet(){
     <p class="note"><b style="color:var(--ink)">What it needs:</b> one row per circuit, with at
     least a room, a description of the circuit, and something naming the fitting. A count and a
     wattage make the load totals work. Anything the sheet does not say is left blank and flagged
-    on the review sheet, never filled in for you.</p>`+logBlock());
+    on the review sheet, never filled in for you.</p>`+reopenBlock()+logBlock());
     return;
   }
   const t=sheet.sheets[sheetIdx];
@@ -1882,7 +1943,7 @@ function vSheet(){
     const cur=colMap[f.key]===undefined?-1:colMap[f.key];
     return `<tr>
       <td style="padding:5px 10px 5px 0;font-weight:600;font-size:13px;white-space:nowrap;vertical-align:top">${escHTML(f.label)}${f.required?' <span style="color:var(--bad)">*</span>':''}</td>
-      <td style="padding:5px 0;vertical-align:top"><select onchange="setMap('${f.key}',this.value)" style="padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit;font-size:13px;min-width:190px"><option value="-1"${cur===-1?' selected':''}>&mdash; not used &mdash;</option>${optionsFor(cur)}</select></td>
+      <td style="padding:5px 0;vertical-align:top"><select onchange="setMap('${f.key}',this.value)" style="padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:inherit;font-size:13px;min-width:190px"><option value="-1"${cur===-1?' selected':''}>&mdash; not used &mdash;</option>${optionsFor(cur)}</select></td>
       <td style="padding:5px 0 5px 12px;font-size:12px;color:var(--muted);vertical-align:top;max-width:34ch">${escHTML(f.help)}</td>
     </tr>`;
   }).join('');
@@ -1905,7 +1966,7 @@ function vSheet(){
   const isDwg=(sheet.plan_report||[]).length>0;
   const noun=isDwg?'drawing':'sheet';
   const planNote=isDwg
-    ? '<div class="note err" style="border:1px solid var(--bad);border-radius:8px;padding:11px 14px;margin:0 0 16px"><b>What the drawing could not tell us</b><ul style="margin:6px 0 0;padding-left:18px">'
+    ? '<div class="note err card warn" style="margin:0 0 16px"><b>What the drawing could not tell us</b><ul style="margin:6px 0 0;padding-left:18px">'
       +(sheet.plan_report||[]).map(l=>'<li style="margin:3px 0">'+escHTML(l)+'</li>').join('')+'</ul></div>'
     : '';
   h(sourceTabs()+`<h2>What each column means</h2>
@@ -2015,7 +2076,7 @@ function vCheck(){
     <button class="ghost" onclick="openIt('report')">Open the report</button>
     <button class="ghost" onclick="openIt('folder')">Open the CSVs in Explorer</button>
     <button class="ghost" onclick="reloadSheet()">Reload after edits</button>
-    <button class="ghost" onclick="loadScenes()">Edit the scenes</button>
+    <button class="ghost" onclick="loadScenes()">Edit the area scenes</button>
     <button class="ghost" onclick="loadFittings()">Edit the fittings</button>
     <button onclick="vBuild()">Looks right \\u2192 Build</button>
   </div>
@@ -2063,21 +2124,30 @@ function sceneRow(s,i){
 }
 function vScenes(){
   setNav('check');
-  if(!sceneData){h('<h2>Scenes</h2><p class="lead">Reading the schedules&hellip;</p>');return}
+  if(!sceneData){h('<h2>Area scenes</h2><p class="lead">Reading the schedules&hellip;</p>');return}
   const rooms=sceneRooms();
-  if(!rooms.length){h('<h2>Scenes</h2><p class="lead">This project has no rooms with circuits yet.</p><div class="row"><button class="ghost" onclick="vCheck()">Back to the check</button></div>');return}
+  if(!rooms.length){h('<h2>Area scenes</h2><p class="lead">This project has no rooms with circuits yet.</p><div class="row"><button class="ghost" onclick="vCheck()">Back to the check</button></div>');return}
   if(!sceneArea||!rooms.includes(sceneArea))sceneArea=rooms[0];
+  // A project read from a spreadsheet or a DWG arrives with rooms but no
+  // scenes at all -- those documents do not carry them -- so the editor
+  // opened onto an unexplained empty table (James, 08-13: a bit of a tease).
+  // Say why it is empty, and that adding scenes here is real.
+  const noScenes=sceneData.areas.length?'':
+    '<div class="card" style="max-width:62ch;margin:0 0 18px"><b style="color:var(--ink)">No area scenes came in with this project.</b><p class="note" style="margin-top:6px">A schedule spreadsheet or a drawing does not carry scenes, so this list starts empty. Area scenes you add here are real &mdash; they are written into the built file, tied to their room. If you prefer, leave this alone and set scenes up in Lutron Designer instead.</p></div>';
   const cur=sceneData.areas.find(a=>a.area===sceneArea)||{area:sceneArea,scenes:[]};
   const opts=rooms.map(a=>`<option value="${escAttr(a)}" ${a===sceneArea?'selected':''}>${escHTML(a)}</option>`).join('');
   const rows=cur.scenes.map(sceneRow).join('');
   const others=rooms.filter(a=>a!==sceneArea).map(a=>`<label style="display:block;padding:2px 0"><input type="checkbox" class="tgt" value="${escAttr(a)}"> ${escHTML(a)}</label>`).join('');
-  h(`<h2>Scenes</h2>
-  <p class="lead">Set up one room the way you want it, then copy it to the others. The
-  scene names and numbers travel, and each scene sets its level on every circuit in the
-  room it lands in &mdash; so the whole house is named and numbered the same, and you
-  fine-tune from there.</p>
+  h(`<h2>Area scenes</h2>
+  <p class="lead">These are area scenes &mdash; each one belongs to a room and sets the
+  circuits in that room, and a keypad button then recalls the room's scene. That is how
+  this tool programmes. Set up one room the way you want it, then copy its area scenes
+  to the others: the names and numbers travel, and each scene sets its level on every
+  circuit in the room it lands in &mdash; so the whole house is named and numbered the
+  same, and you fine-tune from there.</p>
+  ${noScenes}
   <label for="sa">Room</label>
-  <select id="sa" onchange="sceneArea=this.value;vScenes()" style="width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit">${opts}</select>
+  <select id="sa" onchange="sceneArea=this.value;vScenes()" style="width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:inherit">${opts}</select>
   <div style="overflow-x:auto">
   <table id="stbl" style="width:100%;border-collapse:collapse;margin:14px 0;min-width:420px">
     <tr style="text-align:left;color:var(--muted);font-size:12.5px">
@@ -2091,14 +2161,14 @@ function vScenes(){
   </div>
   <p class="note">Leaving a level blank keeps whatever the circuits are set to now. Typing
   one sets every circuit in this room to it.</p>
-  <h2 style="margin-top:26px">Copy these scenes to&hellip;</h2>
+  <h2 style="margin-top:32px">Copy these area scenes to&hellip;</h2>
   <div style="margin:8px 0 14px">${others||'<span class="note">There is only one room.</span>'}</div>
   <div class="row">
     <button class="ghost" onclick="tickAll()">Select all</button>
     <button onclick="copyScenes()">Copy</button>
     <button class="ghost" onclick="vCheck()">Back to the check</button>
   </div>
-  <p class="note">Copying REPLACES the scenes in the rooms you tick. The previous
+  <p class="note">Copying REPLACES the area scenes in the rooms you tick. The previous
   Scenes.csv is kept alongside it as Scenes.csv.bak.</p>`);
 }
 function dropScene(btn){btn.closest('tr').remove()}
@@ -2256,7 +2326,7 @@ function vBuild(){
     ${S.hw_path?`<button class="ghost" onclick="openIt('folder')">Show the file</button>
                  <button class="ghost" onclick="openIt('hw')">Open in Lutron Designer</button>`:''}
   </div>
-  ${S.windows?'':'<p class="note">Note: you are not on Windows &mdash; the build here uses Docker and the result is for development only. The real file must be built on the Windows machine that has Lutron Designer.</p>'}
+  ${S.windows?'':'<p class="note"><b style="color:var(--ink)">You are not on Windows.</b> The .hw file has to be built on a Windows machine with Lutron Designer installed &mdash; a file built on this machine cannot be opened by Designer.</p>'}
   ${logBlock()}`);
 }
 function stamp(){return JSON.stringify([S.project,S.report_ready,S.review_ready,
@@ -2318,9 +2388,36 @@ async function refresh(repaint){
     else if(S.stage==='building'||view==='build')vBuild();
   }
 }
+// The ONE thing the app does online by itself: a single anonymous question
+// to GitHub at launch -- is there a newer release? A copy handed out as a
+// download link has no other way to learn it is stale. Every failure is
+// silence, because offline must look exactly like up to date -- this tool
+// gets used on site, where there is often no network at all.
+async function checkUpdate(){
+  try{
+    const r=await fetch('https://api.github.com/repos/homeplayltd/lutron-builder/releases/latest');
+    if(!r.ok)return;
+    const j=await r.json();
+    const latest=String(j.tag_name||'').replace(/^v/,'');
+    if(!latest)return;
+    // Compared number by number: string order calls 1.10 older than 1.9.
+    const part=v=>v.split('.').map(x=>parseInt(x,10)||0);
+    const a=part(latest), b=part((S&&S.version)||'');
+    let newer=false;
+    for(let i=0;i<Math.max(a.length,b.length);i++){
+      if((a[i]||0)>(b[i]||0)){newer=true;break}
+      if((a[i]||0)<(b[i]||0))break;
+    }
+    if(!newer)return;
+    // The release name arrives from the network, so it is escaped like every
+    // other string the page did not write itself.
+    document.getElementById('upd').innerHTML=' &middot; <a href="https://github.com/homeplayltd/lutron-builder/releases/latest" target="_blank" style="color:inherit;text-decoration:underline">v'+escHTML(latest)+' is available</a>';
+  }catch(e){}
+}
 (async()=>{
   await refresh(false);
   if(S.review_ready)vCheck(); else vStep2();
+  checkUpdate();
 })();
 </script></body></html>
 """
