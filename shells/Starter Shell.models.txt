@@ -10,4 +10,14 @@
 #   python -m hwwriter.cli --server "(localdb)\MSSQLLocalDB" inspect \
 #     --shell "shells\Starter Shell.hw"
 # and copy the ModelInfoID numbers it lists here.
-731, 1321, 1326, 1327, 1328, 3558, 3886, 3887, 3888, 3889, 5063.
+731
+1321
+1326
+1327
+1328
+3558
+3886
+3887
+3888
+3889
+5063

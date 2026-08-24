@@ -1,4 +1,9 @@
 KeypadModel,LutronModelInfoID,Family,DefaultButtonCount,Placeable,Notes
+HQWT-S-PRRW-WH,3918,HomeWorks QS Wireless Tabletop / Pico,7,no,7-button Pico-style (used for music/scene combos)
+HD-4B-AW,5338,HomeWorks Dimmer (in-wall switched),4,no,4-button at-wall dimmer
+Phantom Keypad,1811,Virtual,18,no,Software keypad triggered by touchpanels / Control4 / Crestron via integration API
+Porch Light In-line Switch,4772,HomeWorks (in-line),0,no,Wired in-line switch - no buttons
+Lutron Lamp Dimmer,5029,HomeWorks Plug-in,0,no,Plug-in lamp dimmer module - no buttons
 PALLADIOM-2B,3886,Palladiom,2,yes,Palladiom 2 Button (HQWT-U-P2W)
 PALLADIOM-3B,3887,Palladiom,3,yes,Palladiom 3 Button (HQWT-U-P3W)
 PALLADIOM-3BRL,3888,Palladiom,3,yes,Palladiom 3 Button with raise/lower (HQWT-U-PRW)

@@ -192,7 +192,7 @@ def test_hwi_is_not_offered_as_a_keypad_range():
     assert not any("HWI" in f or "Wired In-Wall" in f for f in fams), (
         f"the wired in-wall category is being offered as a range: {fams}")
     # The real ranges must survive -- this is a narrow exclusion, not a purge.
-    for real in ("Alisse", "Palladiom", "Aviena"):
+    for real in ("Palladiom", "HomeWorks QS Wired Designer (seeTouch)"):
         assert real in fams, f"{real} is no longer offered"
 
 

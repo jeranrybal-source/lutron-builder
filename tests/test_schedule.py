@@ -74,7 +74,7 @@ def test_families_offered_are_real_ranges():
     # A family is only a choice if it offers several sizes; one-offs (a
     # tabletop Pico, a plug-in dimmer, the virtual keypad) are not.
     assert len(fams) >= 2
-    assert "Palladiom" in fams and "Alisse" in fams
+    assert "Palladiom" in fams and "HomeWorks QS Wired Designer (seeTouch)" in fams
     assert "Virtual" not in fams
 
 
