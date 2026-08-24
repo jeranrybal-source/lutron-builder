@@ -1,21 +1,12 @@
 KeypadModel,LutronModelInfoID,Family,DefaultButtonCount,Placeable,Notes
-HWIS-5BRL-F-SN,2478,HomeWorks Wired In-Wall (HWI),5,yes,5-button engraved with raise/lower
-HWIS-7BRL-F-SN,2482,HomeWorks Wired In-Wall (HWI),7,yes,7-button engraved with raise/lower
-HWIS-8BRL-F-SN,2484,HomeWorks Wired In-Wall (HWI),8,yes,8-button engraved with raise/lower
-HWIS-10BRL-F-BC,2486,HomeWorks Wired In-Wall (HWI),10,yes,10-button engraved with raise/lower
-HQWT-S-PRRW-WH,3918,HomeWorks QS Wireless Tabletop / Pico,7,no,7-button Pico-style (used for music/scene combos)
-HD-4B-AW,5338,HomeWorks Dimmer (in-wall switched),4,no,4-button at-wall dimmer
-Phantom Keypad,1811,Virtual,18,no,Software keypad triggered by touchpanels / Control4 / Crestron via integration API
-Porch Light In-line Switch,4772,HomeWorks (in-line),0,no,Wired in-line switch - no buttons
-Lutron Lamp Dimmer,5029,HomeWorks Plug-in,0,no,Plug-in lamp dimmer module - no buttons
-ALISSE-1COL-2B,5032,Alisse,2,yes,Alisse 1-Column 2 Button
-ALISSE-1COL-3B,5033,Alisse,3,yes,Alisse 1-Column 3 Button
-ALISSE-2COL-2B-2B,5035,Alisse,4,yes,Alisse 2-Column 2+2 Button
-ALISSE-2COL-3B-3B,5036,Alisse,6,yes,Alisse 2-Column 3+3 Button
 PALLADIOM-2B,3886,Palladiom,2,yes,Palladiom 2 Button (HQWT-U-P2W)
 PALLADIOM-3B,3887,Palladiom,3,yes,Palladiom 3 Button (HQWT-U-P3W)
 PALLADIOM-3BRL,3888,Palladiom,3,yes,Palladiom 3 Button with raise/lower (HQWT-U-PRW)
 PALLADIOM-4B,3889,Palladiom,4,yes,Palladiom 4 Button (HQWT-U-P4W)
-AVIENA-1COL-T,5462,Aviena,2,yes,Aviena 1-Column 1 Toggle
-AVIENA-1COL-TTT,5479,Aviena,6,yes,Aviena 1-Column 3 Toggle
-AVIENA-2COL-TT-TT,5464,Aviena,8,yes,Aviena 2-Column 2+2 Toggle
+HQRD-W6BRL-WH,731,HomeWorks QS Wireless Designer (seeTouch RF),6,yes,6-button RF seeTouch with raise/lower
+HQWD-W3S-WH,3558,HomeWorks QS Wired Designer (seeTouch),3,yes,3-button wired seeTouch with raise/lower
+HQWD-W4BS-WH,1321,HomeWorks QS Wired Designer (seeTouch),4,yes,4-button wired seeTouch (no raise/lower)
+HQWD-W4S-WH,1326,HomeWorks QS Wired Designer (seeTouch),4,yes,4-button wired seeTouch with raise/lower
+HQWD-W5BRL-WH,1327,HomeWorks QS Wired Designer (seeTouch),5,yes,5-button wired seeTouch with raise/lower
+HQWD-W6BRL-WH,1328,HomeWorks QS Wired Designer (seeTouch),6,yes,6-button wired seeTouch with raise/lower
+HRST-W3RL-XX,5063,Sunnata RF,3,yes,3-button RF Sunnata with raise/lower
