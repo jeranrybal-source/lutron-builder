@@ -480,7 +480,7 @@ class Builder:
                           f"FixtureAssignmentID = {self.shell.fixture_assignment_id}",
                           self._stamp("tblFixtureAssignment", {
                               "FixtureAssignmentID": fa_id,
-                              "PARENTID": sl_id,
+                              "ParentID": sl_id,
                               "ParentType": PT_SWITCHLEG,
                               "Name": f"Default{fa_id}",
                               "FixtureID": self.r.fixture_ids[load.fixture_ref],
@@ -621,6 +621,28 @@ class Builder:
                                   if kp.link else 0,
                               "SortOrder": 0}))
             device_ids[kp.name] = dev_id
+            if kp.model_label == "PALLADIOM-2B":
+                # AVS FIX (2026-09-03): CustomButtonKitModelNumber is never set by
+                # any hwwriter code path -- it's silently inherited verbatim from
+                # whatever template device this model clones from (emit.py's
+                # clone()). For PALLADIOM-2B, Starter Shell.hw's own bundled example
+                # device has its two real buttons wired to bulk-unit positions 0 and
+                # 3 (confirmed via SQL and via shell.py's _read_keypad_blueprints(),
+                # which reads bp.buttons straight from that one template device's
+                # tblKeypadButton rows) -- not positions 0 and 1. Per Lutron's own
+                # Button Kit spec (p/n 369881n): a kit's molded slots must physically
+                # match the wired switch positions on the bulk unit, not just the
+                # button count -- a "2-Button" kit's slots are cut for adjacent
+                # positions 1-2 and won't line up with a switch actually sitting at
+                # position 4. Jeran confirmed (2026-09-03) this matches the real
+                # hardware wiring on these keypads, so PBT-4W -- not the inherited
+                # PBT-2W -- is the physically correct kit for this model as this
+                # shell defines it.
+                self.em.raw(
+                    "UPDATE tblControlStationDevice "
+                    "SET CustomButtonKitModelNumber = 'PBT-4W' "
+                    f"WHERE ControlStationDeviceID = {dev_id};"
+                )
             self._map(station_id)
             self._map(dev_id)
             self._integration(dev_id, INTEG_KEYPAD_DEVICE)
@@ -782,6 +804,26 @@ class Builder:
                               "ParentID": btn_id,
                               "ParentType": PT_BUTTON,
                               "SortOrder": 0,
+                              # AVS FIX (2026-09-02): force Designer's
+                              # single-action ObjectType (60) explicitly
+                              # instead of leaving it to whatever button
+                              # got cloned as the template. Starter
+                              # Shell.hw has zero ObjectType=60 example
+                              # buttons -- every example there is a
+                              # Toggle (ObjectType=74, uses OnPresetID/
+                              # OffPresetID) -- so every cloned row was
+                              # inheriting ObjectType=74 while this code
+                              # writes single-action data into PresetID
+                              # only. Designer reads ObjectType to know
+                              # which preset field to look at; with
+                              # ObjectType=74 it looked for OnPresetID/
+                              # OffPresetID (both None here) and showed
+                              # the button as having no programming at
+                              # all, confirmed directly in Designer even
+                              # though link/orphan integrity checks
+                              # (tblProgrammingModel/tblPreset/
+                              # tblPresetAssignment) all passed clean.
+                              "ObjectType": 60,
                               # A single-action button keeps its press preset in
                               # PresetID -- all 69 of Designer's type-60 models
                               # do, and none uses PressPresetID. Putting it in
