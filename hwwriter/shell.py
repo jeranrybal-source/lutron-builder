@@ -427,8 +427,6 @@ FROM tblKeypadButton b
 JOIN tblProgrammingModel pm ON pm.ProgrammingModelID = b.ProgrammingModelID
 JOIN tblPreset p ON p.ParentID = pm.ProgrammingModelID
 JOIN tblEngravingPosition ep ON ep.ParentDeviceID = b.ButtonID
-JOIN tblPresetAssignment pa2 ON pa2.ParentID = p.PresetID
-     AND pa2.AssignableObjectType = 2 AND pa2.AssignmentCommandType = 5
 ORDER BY b.ButtonID;
 """, db)
         if row:
