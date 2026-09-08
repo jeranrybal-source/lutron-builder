@@ -15,3 +15,6 @@ HQWD-W4S-WH,1326,HomeWorks QS Wired Designer (seeTouch),4,yes,4-button wired see
 HQWD-W5BRL-WH,1327,HomeWorks QS Wired Designer (seeTouch),5,yes,5-button wired seeTouch with raise/lower
 HQWD-W6BRL-WH,1328,HomeWorks QS Wired Designer (seeTouch),6,yes,6-button wired seeTouch with raise/lower
 HRST-W3RL-XX,5063,Sunnata RF,3,yes,3-button RF Sunnata with raise/lower
+HQRD-PRO-WH,4863,HomeWorks QS RF (load-controlling dimmer),0,yes,RF dimmer - no buttons; controls a load directly via RF; confirmed at Trash Room Ext Door and Right of Front Door/By Entry in Ryan Smith Tuhaye.hw
+HQRD-HN6BRL-WH,4320,HomeWorks QS RF Hybrid (seeTouch RF + built-in dimmer),6,yes,Hybrid: 6-button RF seeTouch-style keypad with a built-in dimmer controlling its own load; also programmable like a normal keypad for other zones; confirmed at multiple entry locations in Ryan Smith Tuhaye.hw
+HQRD-8ANS-WH,729,HomeWorks QS RF (load-controlling switch),0,yes,RF switch (non-dimming) - no buttons; controls a load directly via RF; confirmed via dedicated 8ANS confirmation test station in Ryan Smith Tuhaye V3.hw
