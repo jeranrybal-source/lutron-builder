@@ -8,3 +8,7 @@ QS Shade Controller (single),5044,1,Single-shade QS controller
 Wireless Repeater,2454,0,No outputs - extends radio coverage
 Processor,1886,0,Main HXP processor - already present, not a module to add
 Processor Card,1392,0,Processor support card - already present
+0-10V + Switching Module (4-output),4712,4,LQSE-4T5-120-D; DIN Rail Power Module 0-10V and Switching
+0-10V + Softswitch Module 20A (4-output),5241,4,LQSE-4T20-120-D; Multi-Feed Capable DIN Rail Power Module 20A 0-10V and Switching
+LED+ Adaptive Module (4-output),4888,4,LQSE-4A5-120-D; DIN Rail Power Module LED+ Adaptive 4 Output
+Switching Module 8A (4 line-voltage + 1 contact closure),4710,5,LQSE-4S8-120-D; DIN Rail Power Module Switching 8A; 4 line-voltage switched outputs plus 1 contact closure output (5 total) - confirmed by Jeran
